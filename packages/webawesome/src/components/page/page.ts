@@ -1,5 +1,5 @@
 import type { PropertyValues } from 'lit';
-import { html, isServer } from 'lit';
+import { css, html, isServer } from 'lit';
 import { customElement, property, query } from 'lit/decorators.js';
 import { ifDefined } from 'lit/directives/if-defined.js';
 import { live } from 'lit/directives/live.js';
@@ -121,7 +121,11 @@ function toLength(px: number | string): string {
  */
 @customElement('wa-page')
 export default class WaPage extends WebAwesomeElement {
-  static css = [visuallyHidden, styles];
+  static css = [
+    visuallyHidden,
+    // Wrap page styles in an `@layer` so that we don't need to worry about specificity problems with the inserted mobile styles `<style>` tag.
+    css`@layer wa-page { ${styles} }`
+  ];
 
   private readonly hasSlotController = new HasSlotController(this, 'navigation-footer', 'mobile-navigation-footer');
 
@@ -206,6 +210,16 @@ export default class WaPage extends WebAwesomeElement {
   mobileBreakpoint = '768px';
 
   /**
+   * @internal
+   * Private break point for storing the actual pixel number value
+   */
+  private internalMobileBreakpointPx = toPx(this.mobileBreakpoint);
+
+  /** Space-separated list of `banner`, `header`, `subheader`, in any order that will disable its sticky properties. */
+  @property({ attribute: "disable-sticky", reflect: true })
+  disableSticky: undefined | null | string = null
+
+  /**
    * Where to place the navigation when in the mobile viewport.
    */
   @property({ attribute: 'navigation-placement', reflect: true }) navigationPlacement: 'start' | 'end' = 'start';
@@ -266,6 +280,27 @@ export default class WaPage extends WebAwesomeElement {
     }
     super.updated(changedProperties);
   }
+
+  protected willUpdate(changed: PropertyValues<this>) {
+    // Forced style recalc, but once per breakpoint change rather than per resize.
+    if (changed.has('mobileBreakpoint')) {
+      this.internalMobileBreakpointPx = toPx(this.mobileBreakpoint);
+    }
+  }
+
+firstUpdated(changed: PropertyValues<this>) {
+  // ...existing main-content / toggle detection...
+  this.resizeObserver?.observe(this);
+  for (const el of [this.banner, this.header, this.subheader, this.footer]) {
+    this.resizeObserver?.observe(el);
+  }
+  super.firstUpdated(changed);
+}
+
+disconnectedCallback() {
+  super.disconnectedCallback();
+  this.resizeObserver?.disconnect();
+}
 
   constructor() {
     super();
@@ -371,6 +406,8 @@ export default class WaPage extends WebAwesomeElement {
     let nonce = (this.nonce || globalThis.litNonce || null) as string | null;
 
     return html`
+      <!-- This looks weird, but because all other slots rely on the slotted content widths, we use this to get the actual width -->
+      <div class="width-measurer"></div>
       <a href="#main-content" part="skip-to-content" class="wa-visually-hidden">
         <slot name="skip-to-content">Skip to content</slot>
       </a>
