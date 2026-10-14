@@ -52,7 +52,7 @@ function toPx(value: string | number, element?: HTMLElement | SVGElement): numbe
 
   // Move this down here, if we leave it as a default assigned param it breaks SSR on servers without a DOM.
   if (!element) {
-    element = document.documentElement
+    element = document.documentElement;
   }
   const previousValue = element.style.getPropertyValue(resolver);
   element.style.setProperty(resolver, value as string);
@@ -128,7 +128,11 @@ export default class WaPage extends WebAwesomeElement {
   static css = [
     visuallyHidden,
     // Wrap page styles in an `@layer` so that we don't need to worry about specificity problems with the inserted mobile styles `<style>` tag.
-    css`@layer wa-page { ${styles} }`
+    css`
+      @layer wa-page {
+        ${styles}
+      }
+    `,
   ];
 
   private readonly hasSlotController = new HasSlotController(this, 'navigation-footer', 'mobile-navigation-footer');
@@ -186,7 +190,7 @@ export default class WaPage extends WebAwesomeElement {
   @query("[part~='footer']") footer: HTMLElement;
   @query("[part~='banner']") banner: HTMLElement;
   @query("[part~='drawer']") navigationDrawer: WaDrawer;
-  @query(".width-measurer") private widthMeasurer: HTMLElement;
+  @query('.width-measurer') private widthMeasurer: HTMLElement;
   @query("slot[name~='navigation-toggle']") navigationToggleSlot: HTMLSlotElement;
 
   /**
@@ -218,12 +222,12 @@ export default class WaPage extends WebAwesomeElement {
    * @internal
    * Private break point for storing the actual pixel number value
    */
-   // For some reason "private" reports this as not used and breaks builds?
+  // For some reason "private" reports this as not used and breaks builds?
   protected internalMobileBreakpointPx = toPx(this.mobileBreakpoint);
 
   /** Space-separated list of `banner`, `header`, `subheader`, in any order that will disable its sticky properties. */
-  @property({ attribute: "disable-sticky", reflect: true })
-  disableSticky: undefined | null | string = null
+  @property({ attribute: 'disable-sticky', reflect: true })
+  disableSticky: undefined | null | string = null;
 
   /**
    * Where to place the navigation when in the mobile viewport.
@@ -249,8 +253,8 @@ export default class WaPage extends WebAwesomeElement {
                 const width = this.offsetWidth; // Reach up onto the `host` `<wa-page>`. We don't use the widthMeasurer as that will be `<wa-page>`'s contentBox and not borderBox. `offsetWidth` wont reflow as its within a ResizeObserver callback so its already been measured.
                 const view = width >= this.internalMobileBreakpointPx ? 'desktop' : 'mobile';
                 if (view !== this.view) {
-                  this.view = view
-                };
+                  this.view = view;
+                }
               }
             }
           });
@@ -290,7 +294,7 @@ export default class WaPage extends WebAwesomeElement {
   constructor() {
     super();
 
-    if ("addEventListener" in this) {
+    if ('addEventListener' in this) {
       this.addEventListener('click', this.handleNavigationToggle);
     }
   }

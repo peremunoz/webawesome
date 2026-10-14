@@ -130,7 +130,7 @@ export default class WaTabGroup extends WebAwesomeElement {
       // Activate the initial tab now, before the first paint. This is a microtask after the first
       // render, so the panel is in the first frame. Scrolling is skipped here because the tab
       // group may not be laid out or visible yet; the IntersectionObserver below handles that.
-      let initialTab = this.getActiveTab() ?? this.tabs[0]
+      let initialTab = this.getActiveTab() ?? this.tabs[0];
 
       if (this.active) {
         initialTab = this.tabs.find(t => t.panel === this.active) ?? initialTab;
@@ -313,7 +313,10 @@ export default class WaTabGroup extends WebAwesomeElement {
     });
   }
 
-  private setActiveTab(tab: WaTab, options?: { emitEvents?: boolean; scrollBehavior?: 'auto' | 'smooth', scroll?: boolean }) {
+  private setActiveTab(
+    tab: WaTab,
+    options?: { emitEvents?: boolean; scrollBehavior?: 'auto' | 'smooth'; scroll?: boolean },
+  ) {
     options = {
       emitEvents: true,
       scrollBehavior: 'auto',
