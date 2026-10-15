@@ -27,7 +27,7 @@ function toPx(value: string | number, element?: HTMLElement | SVGElement): numbe
   }
 
   // If CSS.registerProperty isn't supported, try to parse as-is
-  if (!window.CSS || !CSS.registerProperty) {
+  if (!globalThis.CSS || !globalThis.CSS.registerProperty) {
     if (typeof value === 'string' && value.endsWith('px')) {
       return parseFloat(value);
     }
