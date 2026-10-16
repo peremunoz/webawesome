@@ -7,6 +7,7 @@ export default css`
   }
 
   .copy-button__trigger {
+    display: flex;
     position: relative;
   }
 
