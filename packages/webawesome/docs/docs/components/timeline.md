@@ -135,7 +135,7 @@ Use the `icon` slot on an item to replace its default marker with another elemen
 
 ### Variant
 
-Set the `variant` attribute on an item to color its marker and the connector after it with a semantic color. The default is `neutral`. The color is cosmetic and never changes the marker's content, like `variant` on a badge or callout.
+Set the `variant` attribute on an item to color its marker and the connector after it with a semantic color. The default is `neutral`. It's cosmetic and doesn't changes the marker's content, similar to `variant` on a badge or callout.
 
 ```html {.example}
 <wa-timeline>
@@ -157,7 +157,7 @@ Set the `variant` attribute on an item to color its marker and the connector aft
 </wa-timeline>
 ```
 
-To flag an entry that failed or needs attention, pair the variant with an icon in the [icon slot](#custom-icon) and state the reason in the content, so the meaning doesn't depend on color alone.
+To flag something that failed or needs attention, pair variant with an icon and state the reason in the content, so the meaning doesn't depend on color alone.
 
 ```html {.example}
 <wa-timeline>
