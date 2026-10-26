@@ -33,6 +33,7 @@ Web Awesome follows <a href="https://semver.org/" class="appearance-plain">Seman
 
 :::fixed
 
+- Fixed a bug in `<wa-dropdown-item>` where clicking an item with `href` still navigated when `preventDefault()` was called on the click event [issue:2946]
 - Fixed a bug in `<wa-page>` and `<wa-tab-group>` where they did not render on first frame and their first render was delayed [pr:2932]
 - Fixed an issue where `disable-sticky` on `<wa-page>` was not documented. [pr:2932]
 - Fixed a regression in implicit form submission where pressing [[Enter]] submitted the form even when its submit button was disabled [pr:2861]
